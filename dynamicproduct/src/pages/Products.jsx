@@ -3,20 +3,21 @@ import axios from 'axios'
 import React, { useContext, useEffect, useState } from 'react'
 import Product from '../components/Product'
 import ChipCategpry from '../components/ChipCategpry'
-import { Badge} from 'antd'
+import { Badge } from 'antd'
 import { ShoppingCartOutlined } from '@ant-design/icons'
 import { CartContext } from '../context/CartContext'
+import { Link } from 'react-router-dom'
 
 const Products = () => {
 
   const [products, setProduct] = useState([])
   const [category, setCategory] = useState([])
-  const [choosenCategory,setChoosenCategor] = useState("All")
-  const {cartItem} = useContext(CartContext)
+  const [choosenCategory, setChoosenCategor] = useState("All")
+  const { cartItem } = useContext(CartContext)
   console.log(cartItem)
 
   useEffect(() => {
-    const url = choosenCategory == "All" ?"https://dummyjson.com/products":`https://dummyjson.com/products/category/${choosenCategory}`
+    const url = choosenCategory == "All" ? "https://dummyjson.com/products" : `https://dummyjson.com/products/category/${choosenCategory}`
     axios.get(url)
       .then((res) => {
         console.log(res?.data?.products)
@@ -42,20 +43,23 @@ const Products = () => {
           <h1>Ecommerce Website</h1>
         </div>
         <div>
-          <Badge count={cartItem?.length} >
-           <ShoppingCartOutlined className='text-2xl cursor-pointer'/>
-          </Badge>
+          <Link to="cart">
+
+            <Badge count={cartItem?.length} >
+              <ShoppingCartOutlined className='text-2xl cursor-pointer' />
+            </Badge>
+          </Link>
         </div>
-        
+
       </div>
       <div className="flex flex-wrap">
         <div>
-          <ChipCategpry onclick={()=>setChoosenCategor("All")} cat={{name:"All",slug:"All"}} isChoosen = {choosenCategory === "All"}/>
+          <ChipCategpry onclick={() => setChoosenCategor("All")} cat={{ name: "All", slug: "All" }} isChoosen={choosenCategory === "All"} />
 
         </div>
         {
-          category.map((cat)=>(
-            <ChipCategpry onclick={()=>setChoosenCategor(cat.slug)} isChoosen={cat.slug===choosenCategory} cat={cat}/>
+          category.map((cat) => (
+            <ChipCategpry onclick={() => setChoosenCategor(cat.slug)} isChoosen={cat.slug === choosenCategory} cat={cat} />
           ))
         }
       </div>
